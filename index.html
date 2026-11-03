@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NASA Space Explorer</title>
+<meta name="description" content="Explore nine days of NASA Astronomy Pictures of the Day.">
+<link rel="stylesheet" href="style.css">
+<script src="dateRange.js" defer></script><script src="script.js" defer></script>
+</head>
+<body>
+<header class="topbar"><a href="#" class="brand">NASA <span>/ SPACE EXPLORER</span></a><a href="https://science.nasa.gov/apod/" target="_blank" rel="noopener noreferrer">Explore NASA ↗</a></header>
+<main>
+<section class="intro"><p class="eyebrow">ASTRONOMY PICTURE OF THE DAY</p><h1>A little perspective.<br>A whole universe.</h1><p class="lede">Nine days of cosmic discoveries. Pick a starting point, explore the images, and uncover the science behind each one.</p></section>
+<aside class="fact"><span class="eyebrow">DID YOU KNOW?</span><p id="fact"></p></aside>
+<section aria-label="Choose your dates" class="controls">
+<form id="searchForm"><label>Start date<input type="date" id="startDate" required></label><label>End date · 9 days inclusive<input type="date" id="endDate" readonly required></label><button id="searchButton" type="submit">Get Space Images <span aria-hidden="true">↗</span></button></form>
+<p class="hint">Choose a start date at least eight days before today. The end date is calculated for you.</p>
+<details><summary>API settings</summary><label>NASA service<select id="service"><option value="current">Current NASA Science API (no key required)</option><option value="legacy">Legacy API (key required; automatic fallback)</option></select></label><label>Legacy API key<input id="apiKey" type="password" value="DEMO_KEY" autocomplete="off"></label><p class="hint">DEMO_KEY is NASA’s public testing key. Personal keys stay in this page’s memory and are sent only to NASA. <a href="https://api.nasa.gov/" target="_blank" rel="noopener noreferrer">Get your own key ↗</a></p></details>
+</section>
+<section aria-labelledby="galleryHeading"><div class="section-heading"><h2 id="galleryHeading">Your window into space</h2><span class="eyebrow">09 DAYS / ENDLESS WONDER</span></div><p id="status" role="status" aria-live="polite">Select your dates to begin.</p><div id="gallery" class="gallery" aria-busy="false"></div></section>
+</main>
+<footer>Student learning project · Data and imagery from NASA APOD and credited contributors.<br>Independently built; not an official NASA application.</footer>
+<dialog id="detailDialog" aria-labelledby="detailTitle"><button id="closeDialog" class="close" autofocus>Close ✕</button><div id="detailMedia"></div><div class="detail-copy"><p id="detailDate" class="eyebrow"></p><h2 id="detailTitle"></h2><p id="detailExplanation"></p><p id="detailCredit" class="hint"></p><a id="detailLink" target="_blank" rel="noopener noreferrer">Open original on NASA ↗</a></div></dialog>
+</body></html>
