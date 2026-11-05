@@ -1,4 +1,4 @@
-const VERSION = "v2";
+const VERSION = "v3";
 const PREFIX = `nasa-space-explorer:${self.registration.scope}:`;
 const SHELL_CACHE = `${PREFIX}shell-${VERSION}`;
 const API_CACHE = `${PREFIX}api-${VERSION}`;

@@ -89,7 +89,7 @@ async function fetchAPOD(start, end) {
 }
 
 // 5. Create a clickable card for each day. Button elements support keyboard users.
-function makeImage(item) {
+function makeImage(item, large = false) {
   const image = document.createElement('img');
   const original = safeUrl(item.hdurl || item.url);
   let source = original;
