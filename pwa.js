@@ -16,6 +16,56 @@
   let installButton;
   let message;
   let registration = null;
+  const serviceWorkerReady = (async () => {
+    if (
+      !("serviceWorker" in navigator) ||
+      !window.isSecureContext
+    ) {
+      return { registration: null };
+    }
+
+    try {
+      const existing =
+        await navigator.serviceWorker.getRegistration(appBase.href);
+
+      if (!existing || existing.scope !== appBase.href) {
+        await navigator.serviceWorker.register(
+          new URL("service-worker.js", appBase).href
+        );
+      } else {
+        existing.update().catch(() => {});
+      }
+
+      const active = await navigator.serviceWorker.ready;
+
+      if (!navigator.serviceWorker.controller) {
+        await new Promise((resolve) => {
+          const onControllerChange = () => {
+            navigator.serviceWorker.removeEventListener(
+              "controllerchange",
+              onControllerChange
+            );
+            resolve();
+          };
+
+          navigator.serviceWorker.addEventListener(
+            "controllerchange",
+            onControllerChange
+          );
+
+          if (navigator.serviceWorker.controller) {
+            onControllerChange();
+          }
+        });
+      }
+
+      return { registration: active };
+    } catch (error) {
+      return { error };
+    }
+  })();
+
+  window.nasaServiceWorkerReady = serviceWorkerReady;
 
   function updateInstallButton() {
     if (!installButton) return;
@@ -251,18 +301,11 @@
     }
 
     try {
-      const existing =
-        await navigator.serviceWorker.getRegistration(appBase.href);
+      const setup = await serviceWorkerReady;
 
-      if (!existing || existing.scope !== appBase.href) {
-        await navigator.serviceWorker.register(
-          new URL("service-worker.js", appBase).href
-        );
-      } else {
-        existing.update().catch(() => {});
-      }
+      if (setup.error) throw setup.error;
 
-      registration = await navigator.serviceWorker.ready;
+      registration = setup.registration;
 
       if (
         !supportsNotifications() ||

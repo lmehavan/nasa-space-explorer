@@ -89,7 +89,7 @@ async function fetchAPOD(start, end) {
 }
 
 // 5. Create a clickable card for each day. Button elements support keyboard users.
-function makeImage(item, large = false) {
+function makeImage(item) {
   const image = document.createElement('img');
   const original = safeUrl(item.hdurl || item.url);
   let source = original;
@@ -103,7 +103,7 @@ function makeImage(item, large = false) {
   }
   image.src = source;
   image.alt = plainText(item.alt || item.title);
-  image.loading = large ? 'eager' : 'lazy';
+  image.loading = 'eager';
   image.addEventListener('error', () => {
     const message = document.createElement('p');
     message.textContent = 'Image unavailable. Open the original NASA page for this entry.';
@@ -146,7 +146,7 @@ function openDetails(item) {
   const link = document.querySelector('#detailLink');
   link.href = safeUrl(item.permalink || item.url) || 'https://science.nasa.gov/apod/';
   link.textContent = item.media_type === 'video' ? 'Watch video ↗' : 'Open original on NASA ↗';
-  if (item.media_type === 'image') media.append(makeImage(item, true));
+  if (item.media_type === 'image') media.append(makeImage(item));
   else {
     const note = document.createElement('p');
     note.className = 'video-note';
@@ -178,6 +178,9 @@ async function loadGallery(event) {
   gallery.replaceChildren();
   statusMessage.textContent = 'Loading space photos…';
   try {
+    if (window.nasaServiceWorkerReady) {
+      await window.nasaServiceWorkerReady;
+    }
     const { entries, note } = await fetchAPOD(start, end);
     if (!Array.isArray(entries)) throw new Error('NASA returned an unexpected response. Please retry.');
     // Check the dates so we never show unrelated days or duplicate entries.
